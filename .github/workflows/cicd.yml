@@ -2,7 +2,7 @@ name: CI/CD
 
 on:
   push:
-    branches: [ dev" ]
+    branches: [ "dev" ]
 
 env:
   DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -44,8 +44,7 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:${{ github.ref_name }}
 
   # 운영서버 배포
-  deploy-main:
-    if: github.ref == 'refs/heads/main'
+  deploy:
     needs: build
     runs-on: ubuntu-latest
 

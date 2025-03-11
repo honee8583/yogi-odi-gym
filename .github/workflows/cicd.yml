@@ -2,7 +2,7 @@ name: CI/CD
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: [ dev" ]
 
 env:
   DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -71,39 +71,3 @@ jobs:
                 --env PROFILES=prod,auth \
                 ${{ env.IMAGE_NAME }}:main
             fi
-
-  # 테스트 서버 배포
-  deploy-dev:
-    if: github.ref == 'refs/heads/dev'
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 테스트 서버 배포
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.TEST_SERVER_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          password: ${{ secrets.TEST_SERVER_PASSWORD }}
-          script: |
-            CONTAINER_NAME="yog"
-            IMAGE_NAME="${{ env.IMAGE_NAME }}:dev"
-
-            echo "🔍 현재 실행 중인 컨테이너 확인 중..."
-            if [ "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
-                echo "🛑 실행 중인 컨테이너를 중지하고 삭제합니다..."
-                docker stop $CONTAINER_NAME
-                docker rm $CONTAINER_NAME
-            elif [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
-                echo "⚠️ 컨테이너가 중지 상태입니다. 삭제 후 재시작합니다..."
-                docker rm $CONTAINER_NAME
-            fi
-
-            echo "📦 최신 Docker 이미지 Pull..."
-            docker pull $IMAGE_NAME
-
-            echo "🚀 새로운 컨테이너 실행..."
-            docker run -dit --name $CONTAINER_NAME -p 8080:8080 -e PROFILES=dev,auth -e JASYPT_KEY=${{ secrets.JASYPT_KEY }} $IMAGE_NAME
-
-            echo "✅ 배포 완료!"

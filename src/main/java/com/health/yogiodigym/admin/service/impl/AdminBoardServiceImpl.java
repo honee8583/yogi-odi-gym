@@ -31,7 +31,7 @@ public class AdminBoardServiceImpl implements AdminBoardService {
     @Override
     public List<BoardResponseDto> adminSearchBoards(String boardKeyword) {
 
-        return boardRepository.adminSearchBoards(boardKeyword)
+        return boardRepository.findByTitleOrName(boardKeyword)
                 .stream()
                 .map(BoardResponseDto::from)
                 .collect(Collectors.toList());

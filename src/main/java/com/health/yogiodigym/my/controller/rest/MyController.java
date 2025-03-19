@@ -1,7 +1,9 @@
 package com.health.yogiodigym.my.controller.rest;
 
 import com.health.yogiodigym.board.dto.BoardDto.BoardDetailDto;
+import com.health.yogiodigym.board.dto.BoardDto.BoardSearchRequestDto;
 import com.health.yogiodigym.board.service.BoardService;
+import com.health.yogiodigym.common.dto.PageResponseDto;
 import com.health.yogiodigym.common.response.HttpResponse;
 import com.health.yogiodigym.lesson.dto.LessonDto.LessonSearchDto;
 import com.health.yogiodigym.lesson.service.LessonService;
@@ -101,16 +103,10 @@ public class MyController {
     }
 
     @GetMapping("/board")
-    public ResponseEntity<?> searchMyBoard(@RequestParam(required = false) String boardKeyword,
-                                           @RequestParam(required = false) String searchColumn,
-                                           @RequestParam(required = false) List<Long> categories,
-                                           @RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(defaultValue = "10") int size,
-                                           @AuthenticationPrincipal MemberOAuth2User loginUser) {
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
-        Page<BoardDetailDto> boards = boardService.searchMyBoards(loginUser.getMember().getId(), boardKeyword, searchColumn, categories, pageable);
-
+    public ResponseEntity<?> searchMyBoard(@AuthenticationPrincipal MemberOAuth2User loginUser,
+                                           BoardSearchRequestDto searchRequest,
+                                           Pageable pageable) {
+        PageResponseDto<BoardDetailDto> boards = boardService.searchMyBoards(loginUser.getMember(), searchRequest, pageable);
         return ResponseEntity.ok().body(new HttpResponse(HttpStatus.OK, SEARCH_BOARD_SUCCESS.getMessage(), boards));
     }
 

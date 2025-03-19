@@ -6,31 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class BoardDto {
-    private Long id;
-    private Long memberId;
-    private Long categoryId;
-    private String title;
-    private String context;
-    private LocalDateTime createDateTime;
-    private int view;
-    private boolean edit;
-
-    public BoardDto(Board board) {
-        this.id = board.getId();
-        this.memberId = board.getMember().getId();
-        this.categoryId = board.getCategory().getId();
-        this.title = board.getTitle();
-        this.context = board.getContext();
-        this.createDateTime = board.getCreateDateTime();
-        this.view = board.getView();
-        this.edit = board.isEdit();
-    }
 
     @Getter
     @Setter
@@ -81,15 +57,25 @@ public class BoardDto {
     @Getter
     @Setter
     @Builder
+    @ToString
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class BoardRequestDto{
-        private Long memberId;
+    public static class BoardWriteRequestDto{
+        private Long id;
         private Long categoryId;
         private String title;
         private String context;
-        private LocalDateTime createDateTime;
-        private int view;
-        private boolean edit;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BoardSearchRequestDto{
+        private String boardKeyword;
+        private BoardSearchType type;
+        private Long categoryId;
     }
 }

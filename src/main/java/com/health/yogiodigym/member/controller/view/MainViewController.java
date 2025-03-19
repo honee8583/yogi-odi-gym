@@ -46,7 +46,7 @@ public class MainViewController {
         model.addAttribute("chatRooms", chatRooms);
         log.info("채팅방 목록: {}", chatRooms);
 
-        List<BoardDetailDto> boards = boardService.getBoardsTop10();
+        List<BoardDetailDto> boards = boardService.getBoardsTop5();
         model.addAttribute("popularBoards", boards);
         log.info("실시간 인기 게시글: {}", boards);
 

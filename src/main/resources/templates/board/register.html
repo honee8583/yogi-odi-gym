@@ -7,8 +7,10 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
     <script type="text/javascript" th:src="@{'//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js'}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script type="text/javascript"
             th:src="@{'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${@environment.getProperty('kakao.api.scriptKey')} + '&libraries=services'}"></script>
+    <script defer src="/js/board/board.js"></script>
     <style>
         body {
             width: 100%;
@@ -61,30 +63,6 @@
             border-radius: 0 0 10px 10px;
         }
     </style>
-    <script>
-        function validateForm() {
-            let title = document.getElementById('title').value;
-            let context = document.getElementById('context').value;
-            let categoryId = document.querySelector("input[name='categoryId']:checked");
-
-            if (!title.trim()) {
-                alert("제목을 입력해주세요.");
-                return false;
-            }
-
-            if (!context.trim()) {
-                alert("내용을 입력해주세요.");
-                return false;
-            }
-
-            if (!categoryId) {
-                alert("카테고리를 선택해주세요.");
-                return false;
-            }
-
-            return true;
-        }
-    </script>
 </head>
 <body>
 <div class="container-fluid">
@@ -106,8 +84,7 @@
             <div class="card-header">
                 <h2>게시글 쓰기</h2>
             </div>
-            <form th:action="@{/api/board/register}" method="post" onsubmit="return validateForm()">
-                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+            <div id="registerForm">
                 <div class="card-body">
                     <label for="title">제목</label>
                     <div class="form-group">
@@ -131,9 +108,9 @@
 
                 <div class="card-footer">
                     <button type="button" class="btn btn-secondary" onclick="history.back()">이전으로</button>
-                    <button type="submit" class="btn btn-primary">등록완료</button>
+                    <button id="submit-btn" type="button" class="btn btn-primary">등록완료</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>

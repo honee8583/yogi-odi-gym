@@ -33,15 +33,17 @@ public class Board {
     private String context;
 
     private LocalDateTime createDateTime;
-    private int view;
+
+    @Builder.Default
+    private int view = 0;
+
     private boolean edit;
 
     public void incrementView() {
         this.view++;
     }
 
-
-    public void updateBoard(BoardDetailDto dto, Category category) {
+    public void updateBoard(BoardWriteRequestDto dto, Category category) {
         this.title = dto.getTitle();
         this.context = dto.getContext();
         this.category = category;

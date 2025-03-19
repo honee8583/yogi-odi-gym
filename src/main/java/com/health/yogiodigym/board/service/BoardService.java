@@ -1,26 +1,24 @@
 package com.health.yogiodigym.board.service;
 
-import com.health.yogiodigym.board.dto.BoardDto.*;
-import com.health.yogiodigym.board.entity.Board;
+import com.health.yogiodigym.board.dto.BoardDto.BoardDetailDto;
+import com.health.yogiodigym.board.dto.BoardDto.BoardSearchRequestDto;
+import com.health.yogiodigym.board.dto.BoardDto.BoardWriteRequestDto;
+import com.health.yogiodigym.common.dto.PageResponseDto;
 import com.health.yogiodigym.member.entity.Member;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface BoardService {
 
-    Page<BoardDetailDto> searchBoards(String keyword, String column, List<Long> categories, Pageable pageable);
+    PageResponseDto<BoardDetailDto> searchBoards(BoardSearchRequestDto searchRequest, Pageable pageable);
 
-    void registerBoard(BoardRequestDto dto, Member member);
-
-    BoardDetailDto findBoardById(Long id);
+    void registerBoard(BoardWriteRequestDto registerRequest, Member member);
 
     BoardDetailDto getBoardDetail(Long id);
 
-    void editBoard(BoardDetailDto dto);
+    void editBoard(Member member, BoardWriteRequestDto dto);
 
-    Page<BoardDetailDto> searchMyBoards(Long id, String boardKeyword, String searchColumn, List<Long> categories, Pageable pageable);
+    PageResponseDto<BoardDetailDto> searchMyBoards(Member member, BoardSearchRequestDto searchRequest, Pageable pageable);
 
-    List<BoardDetailDto> getBoardsTop10();
+    List<BoardDetailDto> getBoardsTop5();
 }

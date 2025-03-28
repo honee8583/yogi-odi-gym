@@ -8,17 +8,14 @@ import com.health.yogiodigym.board.repository.CommentRepository;
 import com.health.yogiodigym.board.service.CommentService;
 import com.health.yogiodigym.common.exception.BoardNotFoundException;
 import com.health.yogiodigym.common.exception.CommentNotFoundException;
-import com.health.yogiodigym.common.exception.MemberNotFoundException;
 import com.health.yogiodigym.common.exception.NoDeletePermissionException;
 import com.health.yogiodigym.member.entity.Member;
-import com.health.yogiodigym.member.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,12 +23,11 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public List<CommentDto> getCommentsByBoardId(Long boardId) {
+    public List<CommentDto> getComments(Long boardId) {
         return commentRepository.findByBoardIdOrderByCreateDateTimeAsc(boardId)
                 .stream()
                 .map(CommentDto::new)
@@ -39,11 +35,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void addComment(Long boardId, Long memberId, String content) {
+    public void addComment(Long boardId, Member member, String content) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException(boardId));
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
 
         Comment comment = Comment.builder()
                 .board(board)
@@ -56,11 +50,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(Long commentId, Long memberId) {
+    public void deleteComment(Long commentId, Member member) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException(commentId));
 
-        if (!comment.getMember().getId().equals(memberId)) {
+        if (!comment.getMember().getId().equals(member.getId())) {
             throw new NoDeletePermissionException();
         }
 

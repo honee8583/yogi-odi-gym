@@ -1,4 +1,4 @@
-package com.health.yogiodigym.board.controller;
+package com.health.yogiodigym.board.controller.rest;
 
 import static com.health.yogiodigym.common.message.SuccessMessage.REGISTER_BOARD_SUCCESS;
 import static com.health.yogiodigym.common.message.SuccessMessage.SEARCH_BOARD_SUCCESS;

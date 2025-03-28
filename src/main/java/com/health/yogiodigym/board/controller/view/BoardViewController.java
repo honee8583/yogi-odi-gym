@@ -1,4 +1,4 @@
-package com.health.yogiodigym.board.controller;
+package com.health.yogiodigym.board.controller.view;
 
 import com.health.yogiodigym.board.dto.BoardDto.BoardDetailDto;
 import com.health.yogiodigym.board.service.BoardService;

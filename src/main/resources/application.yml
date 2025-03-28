@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local, auth
+    active: local
 
   flyway:
     enabled: true
@@ -61,7 +61,7 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptEncryptor
-    password: ${JASYPT_KEY}
+    password: yogiodigymsecretkey
 
 server:
   servlet:
